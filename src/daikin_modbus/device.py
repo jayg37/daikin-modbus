@@ -1,19 +1,15 @@
 """Register-backed Daikin/Airzone component."""
 
-from modbus_connection.model import Component, gauge, integer, raw_register
+from modbus_connection.model import Component, boolean, gauge, integer, raw_register
 
 
 class DaikinAidoo(Component):
-    """Model the Daikin/Airzone Aidoo Modbus register interface.
-
-    Addresses are zero-based Modbus register offsets as used by the existing
-    working installation. Temperatures are exposed as Fahrenheit values.
-    """
+    """Model the Daikin/Airzone Aidoo Modbus register interface."""
 
     register_ranges = ((0, 5), (14, 15), (54, 58))
 
-    power = integer(0, signed=False, writable=True)
-    """Power state: 0 off, 1 on."""
+    power = boolean(0, writable=True)
+    """Power state."""
 
     setpoint = gauge(1, 0.1, signed=False, writable=True, unit="°F")
     """Temperature setpoint in degrees Fahrenheit."""
@@ -22,7 +18,7 @@ class DaikinAidoo(Component):
     """Measured room temperature in degrees Fahrenheit."""
 
     hvac_mode = integer(3, signed=False, writable=True)
-    """HVAC mode using the device's numeric values."""
+    """HVAC mode: 1 auto, 2 cool, 3 heat, 4 fan, 5 dry."""
 
     fan_percentage = integer(4, signed=False, unit="%")
     """Reported fan percentage; read-only in this release."""
